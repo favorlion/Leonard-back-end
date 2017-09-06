@@ -1,0 +1,27 @@
+<div class="container">
+	<h3>User Administration</h3>
+	<table class='table'>
+		<tr>
+			<th>ID</th>
+			<th>Name</th>
+			<th>Email</th>
+			<th>Views remaining today</th>
+			<th>Connection requests remaining today</th>
+		</tr>
+		
+
+		<% _.each(users, function(user) { %>
+		<tr data-id="<%= user.id %>" data-model="user">
+			<td><%= user.id %></td>
+			<td><%= user.firstname %></td>
+			<td><%= user.email %></td>
+			<td><%= user.profile_views_remaining_today %></td>
+			<td><%= user.connection_requests_remaining_today %></td>
+			<!--
+				<td><span class="pie"><%= user.remaining_today %>,500</span></td>
+			-->
+		</tr> 
+		<% }) %>
+	</table>
+</div>
+<!--<script src="http://webapplayers.com/inspinia_admin-v2.7/js/plugins/peity/jquery.peity.min.js" defer></script>-->

@@ -1,0 +1,12 @@
+body{background-color:#24303c}
+.form-control{height:45px;}
+li{list-style-type:none;}
+/*#signup_form{display: none;}*/
+#sign_in_with_linkedin{background-image:url('../images/linkedin.png');width: 292px;height: 40px;display: inline-block;cursor:pointer;margin-top:20px;display:none;}
+#sign_in_with_linkedin:hover{background-image:url('../images/linkedin-hover.png');}
+#sign_in_with_linkedin:active{background-image:url('../images/linkedin-active.png');}
+#signup_form, .ibox-content{margin-top: 20px;}
+.color-black *{color:black;}
+.vertical-center{min-height: 100%;min-height: 100vh;display: flex;align-items: center;}
+.vertical-center > div{width: 100%;}
+.alert-dismissable .close, .alert-dismissible .close{top:2px;}

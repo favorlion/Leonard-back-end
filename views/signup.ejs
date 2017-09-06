@@ -1,0 +1,84 @@
+<link rel="stylesheet" type="text/css" href="styles/signup.css" />
+<div class="middle-box text-center loginscreen animated fadeInDown vertical-center">
+    <div>
+        <div>
+            <h1 class="logo-name">Leonard</h1>
+        </div>
+        <% if(req.session.flash && req.session.flash.err) { %>
+            <div class="alert alert-danger alert-dismissable">
+                <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                <% if(req.session.flash.err.invalidAttributes) { %>
+                    <% Object.keys(req.session.flash.err.invalidAttributes).forEach(function(error) { %>
+                    <li><%- req.session.flash.err.invalidAttributes[error][0].message %></li>
+                    <% }) %>
+                <% } %>
+                <% if(req.session.flash.err.message) { %>
+                    <li><%- req.session.flash.err.message %></li>
+                <% } %>
+            </div>
+        <% } %>
+        <% req.session.flash={}; %>
+        <span id="sign_in_with_linkedin" onclick="linkedInLoaded();"></span>
+        <form class="m-t" role="form" action="/add_user" method="POST" id="signup_form">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Firstname" name="firstname" id="firstname" required />
+            </div>
+            <div class="form-group">
+                <input type="email" class="form-control" placeholder="Email address" name="email" id="email" required />
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" placeholder="Password" name="password" id="password" required />
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" placeholder="Confirm password" name="confirmPassword" id="confirmPassword" required equalsTo="#password" />
+            </div>
+            <div class="form-group">
+                <div class="checkbox i-checks"><label> <input type="checkbox" required /><i></i> Agree the terms and policy </label></div>
+            </div>
+            <input type="hidden" name="linkedin_profile_id" id="linkedin_profile_id" value="" required />
+            <input type="hidden" name="linkedin_profile_url" id="linkedin_profile_url" value="" required />
+            <input type="hidden" name="user_type" value="Paid" /><!-- BETA Phase -->
+            <input type="hidden" name="_csrf" value="<%= _csrf %>" />
+            <button type="submit" class="btn btn-primary btn-lg block full-width m-b">Register</button>
+            <p class="text-center"><small>Already have an account?</small></p>
+            <a class="btn btn-lg btn-white btn-block" href="/login">Login</a>
+        </form>
+        <p class="m-t"> <small>Leonard &copy; 2017</small> </p>
+    </div>
+</div>
+<script type="text/javascript">
+    function linkedInLoaded(){
+        if(IN && IN.User){
+            if(IN.User.isAuthorized()){
+                getProfileDetails();
+            } else if($("#sign_in_with_linkedin").is(":hidden")){
+                $("#sign_in_with_linkedin").css("display", "inline-block");
+                $("#signup_form").hide();
+            } else {
+                IN.User.authorize(getProfileDetails);
+            }
+        } else {
+            console.log("Page not loaded properly")
+        }
+    }
+
+    function getProfileDetails(){
+        $("#sign_in_with_linkedin").hide();
+        $("#signup_form").show();
+        IN.API.Profile("me").fields('id,firstName,lastName,email-address,public-profile-url').result(function(resp){
+            var profile_details = resp.values[0];
+            $("#firstname").val(profile_details.firstName);
+            $("#email").attr("readonly",true).val(profile_details.emailAddress);
+            var profile_url = profile_details.publicProfileUrl;
+            var profile_id = profile_url.slice(profile_url.lastIndexOf('/')+1)
+            $("#linkedin_profile_id").val(profile_id);
+            $("#linkedin_profile_url").val(profile_url);
+            // console.log(resp.values[0]);
+        })
+    }
+</script>
+<script type="text/javascript" src="http://platform.linkedin.com/in.js">
+    api_key: 81t251nydwa5us
+    onLoad : linkedInLoaded
+    authorize : true
+</script>

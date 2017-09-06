@@ -1,0 +1,20 @@
+<div class="container">
+        <h3>Errors</h3>
+        <table class='table'>
+                <tr>
+                        <th>User ID</th>
+                        <th>Error Desc</th>
+                        <th>Date Occurred</th>
+                </tr>
+
+
+                <% _.each(errors, function(err) { %>
+                <tr data-id="<%= err.id %>" data-model="err">
+                        <td><%= err.user_id %></td>
+                        <td><%= err.desc %></td>
+                        <td><%= err.date %></td>
+                </tr>
+                <% }) %>
+        </table>
+</div>
+
